@@ -25,7 +25,8 @@ public:
         cin >> employeeId;
 
         cout << "Enter Employee Name: ";
-        cin >> name;
+        cin.ignore();
+        getline(cin,name);
 
         cout << "Enter Shift (Morning/Evening/Night): ";
         cin >> shift;
