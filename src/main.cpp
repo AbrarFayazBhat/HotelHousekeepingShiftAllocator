@@ -170,6 +170,33 @@ public:
         Employee::increaseCount();
         cout << "\nEmployee added successfully!\n";
     }
+
+void viewEmployeesFromFile()
+{
+    EmployeeFile record;
+
+    ifstream file("employees.dat", ios::binary);
+
+    if (!file)
+    {
+        cout << "\nFile not found!\n";
+        return;
+    }
+
+    cout << "\n----- Employee Records -----\n";
+
+    while (file.read((char*)&record, sizeof(record)))
+    {
+        cout << "\nEmployee ID: " << record.employeeId;
+        cout << "\nEmployee Name: " << record.name;
+        cout << "\nShift: " << record.shift;
+        cout << "\nFloor: " << record.floor;
+        cout << "\n------------------------\n";
+    }
+
+    file.close();
+}
+
     // Display all employees
     void viewEmployees()
     {
@@ -247,7 +274,7 @@ int main()
             allocator.addEmployee();
             break;
         case 2:
-            allocator.viewEmployees();
+            allocator.viewEmployeesFromFile();
             break;
         case 3:
         {
