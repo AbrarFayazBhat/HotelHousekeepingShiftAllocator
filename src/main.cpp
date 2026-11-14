@@ -92,6 +92,20 @@ public:
     {
         totalEmployees++;
     }
+    string getName() const
+    {
+      return name;
+    }
+
+    string getShift() const
+    {
+      return shift;
+    }
+
+    int getFloor() const
+    {
+       return floor;
+    }   
     // Friend function
     friend void displayEmployeeDetails(const Employee &e)
     {
@@ -119,6 +133,12 @@ class ShiftAllocator
     int count = 0;
     Employee *currentEmployee = nullptr;
 public:
+    void saveEmployee(EmployeeFile record)
+    {
+        ofstream file("employees.dat", ios::binary | ios::app);
+        file.write((char*)&record, sizeof(record));
+        file.close();
+    }
     // Add employee
     void addEmployee()
     {
@@ -140,6 +160,12 @@ public:
             return;
         }
         employees[count] = newEmployee;
+        EmployeeFile record;
+        record.employeeId = newEmployee.getEmployeeId();
+        strcpy(record.name, newEmployee.getName().c_str());
+        strcpy(record.shift, newEmployee.getShift().c_str());
+        record.floor = newEmployee.getFloor();
+        saveEmployee(record);
         count++;
         Employee::increaseCount();
         cout << "\nEmployee added successfully!\n";
