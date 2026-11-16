@@ -215,25 +215,45 @@ void viewEmployeesFromFile()
         cout << "\nTotal Records: " << count << endl;
     }
     // Search employee by ID
-    void searchEmployee(int id)
+   
+void searchEmployee(int id)
+{
+    EmployeeFile record;
+    bool found = false;
+
+    ifstream file("employees.dat", ios::binary);
+
+    if (!file)
     {
-        bool found = false;
-        for (int i = 0; i < count; i++)
+        cout << "\nFile not found!\n";
+        return;
+    }
+
+    file.seekg(0, ios::beg);
+
+    while (file.read((char*)&record, sizeof(record)))
+    {
+        if (record.employeeId == id)
         {
-            if (employees[i].getEmployeeId() == id)
-            {
-                currentEmployee = &employees[i];
-                cout << "\nEmployee Found!\n";
-                currentEmployee->display();
-                found = true;
-                break;
-            }
-        }
-        if (found == false)
-        {
-            cout << "\nEmployee not found!\n";
+            cout << "\nEmployee Found!";
+            cout << "\nEmployee ID   : " << record.employeeId;
+            cout << "\nEmployee Name : " << record.name;
+            cout << "\nShift         : " << record.shift;
+            cout << "\nFloor         : " << record.floor;
+
+            found = true;
+            break;
         }
     }
+
+    if (!found)
+    {
+        cout << "\nEmployee not found!\n";
+    }
+
+    file.close();
+}
+
     // Check duplicate employee ID
     bool isDuplicate(int id) const
     {
