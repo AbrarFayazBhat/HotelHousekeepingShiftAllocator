@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include<fstream>
-#include<cstring>
+#include <fstream>
+#include <cstring>
 using namespace std;
 // Employee Class
 class Employee
@@ -12,24 +12,28 @@ private:
     string shift = "";
     int floor = 0;
     static int totalEmployees;
+
 public:
-    Employee(){
-        employeeId=0;
-        name="";
-        shift="";
-        floor=0;
+    Employee()
+    {
+        employeeId = 0;
+        name = "";
+        shift = "";
+        floor = 0;
     }
-    Employee(int id, string n, string s, int f){
-     employeeId = id;
-     name = n;
-     shift = s;
-     floor = f;
+    Employee(int id, string n, string s, int f)
+    {
+        employeeId = id;
+        name = n;
+        shift = s;
+        floor = f;
     }
-    Employee(const Employee& e){
-        employeeId=e.employeeId;
-        name=e.name;
-        shift=e.shift;
-        floor=e.floor;
+    Employee(const Employee &e)
+    {
+        employeeId = e.employeeId;
+        name = e.name;
+        shift = e.shift;
+        floor = e.floor;
     }
     // Input employee details
     bool input()
@@ -38,7 +42,7 @@ public:
         cin >> employeeId;
         cout << "Enter Employee Name: ";
         cin.ignore();
-        getline(cin,name);
+        getline(cin, name);
         cout << "Enter Shift (Morning/Evening/Night): ";
         cin >> shift;
         cout << "Enter Floor Number: ";
@@ -94,18 +98,18 @@ public:
     }
     string getName() const
     {
-      return name;
+        return name;
     }
 
     string getShift() const
     {
-      return shift;
+        return shift;
     }
 
     int getFloor() const
     {
-       return floor;
-    }   
+        return floor;
+    }
     // Friend function
     friend void displayEmployeeDetails(const Employee &e)
     {
@@ -115,12 +119,14 @@ public:
         cout << "\nFloor         : " << e.floor;
         cout << "\n";
     }
-    ~Employee(){
+    ~Employee()
+    {
     }
 };
-int Employee::totalEmployees=0;
-class EmployeeFile{
-    public:
+int Employee::totalEmployees = 0;
+class EmployeeFile
+{
+public:
     int employeeId;
     char name[50];
     char shift[50];
@@ -132,11 +138,12 @@ class ShiftAllocator
     Employee employees[100];
     int count = 0;
     Employee *currentEmployee = nullptr;
+
 public:
     void saveEmployee(EmployeeFile record)
     {
         ofstream file("employees.dat", ios::binary | ios::app);
-        file.write((char*)&record, sizeof(record));
+        file.write((char *)&record, sizeof(record));
         file.close();
     }
     // Add employee
@@ -171,88 +178,139 @@ public:
         cout << "\nEmployee added successfully!\n";
     }
 
-void viewEmployeesFromFile()
-{
-    EmployeeFile record;
-
-    ifstream file("employees.dat", ios::binary);
-
-    if (!file)
+    void viewEmployeesFromFile()
     {
-        cout << "\nFile not found!\n";
-        return;
-    }
+        EmployeeFile record;
 
-    cout << "\n----- Employee Records -----\n";
+        ifstream file("employees.dat", ios::binary);
 
-    while (file.read((char*)&record, sizeof(record)))
-    {
-        cout << "\nEmployee ID: " << record.employeeId;
-        cout << "\nEmployee Name: " << record.name;
-        cout << "\nShift: " << record.shift;
-        cout << "\nFloor: " << record.floor;
-        cout << "\n------------------------\n";
-    }
-
-    file.close();
-}
-
-    // Display all employees
-    void viewEmployees()
-    {
-        cout << "\n----- Employee Records -----\n";
-        if (count == 0)
+        if (!file)
         {
-            cout << "\nNo employee records available!\n";
+            cout << "\nFile not found!\n";
             return;
         }
-        else{
-        for (int i = 0; i < count; i++)
+
+        cout << "\n----- Employee Records -----\n";
+
+        while (file.read((char *)&record, sizeof(record)))
         {
-            employees[i].display();
+            cout << "\nEmployee ID: " << record.employeeId;
+            cout << "\nEmployee Name: " << record.name;
+            cout << "\nShift: " << record.shift;
+            cout << "\nFloor: " << record.floor;
+            cout << "\n------------------------\n";
         }
-        }
-        cout << "\nTotal Records: " << count << endl;
+
+        file.close();
     }
+
+    // Display all employees
+    // void viewEmployees()
+    // {
+    //     cout << "\n----- Employee Records -----\n";
+    //     if (count == 0)
+    //     {
+    //         cout << "\nNo employee records available!\n";
+    //         return;
+    //     }
+    //     else
+    //     {
+    //         for (int i = 0; i < count; i++)
+    //         {
+    //             employees[i].display();
+    //         }
+    //     }
+    //     cout << "\nTotal Records: " << count << endl;
+    // }
     // Search employee by ID
-   
-void searchEmployee(int id)
-{
-    EmployeeFile record;
-    bool found = false;
 
-    ifstream file("employees.dat", ios::binary);
-
-    if (!file)
+    void searchEmployee(int id)
     {
-        cout << "\nFile not found!\n";
-        return;
-    }
+        EmployeeFile record;
+        bool found = false;
 
-    file.seekg(0, ios::beg);
+        ifstream file("employees.dat", ios::binary);
 
-    while (file.read((char*)&record, sizeof(record)))
-    {
-        if (record.employeeId == id)
+        if (!file)
         {
-            cout << "\nEmployee Found!";
-            cout << "\nEmployee ID   : " << record.employeeId;
-            cout << "\nEmployee Name : " << record.name;
-            cout << "\nShift         : " << record.shift;
-            cout << "\nFloor         : " << record.floor;
-
-            found = true;
-            break;
+            cout << "\nFile not found!\n";
+            return;
         }
-    }
 
-    if (!found)
+        file.seekg(0, ios::beg);
+
+        while (file.read((char *)&record, sizeof(record)))
+        {
+            if (record.employeeId == id)
+            {
+                cout << "\nEmployee Found!";
+                cout << "\nEmployee ID   : " << record.employeeId;
+                cout << "\nEmployee Name : " << record.name;
+                cout << "\nShift         : " << record.shift;
+                cout << "\nFloor         : " << record.floor;
+
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            cout << "\nEmployee not found!\n";
+        }
+
+        file.close();
+    }
+    void updateEmployee(int id)
     {
-        cout << "\nEmployee not found!\n";
-    }
+        EmployeeFile record;
+        int position = 0;
+        bool found = false;
 
-    file.close();
-}
+        fstream file("employees.dat", ios::in | ios::out | ios::binary);
+
+        if (!file)
+        {
+            cout << "\nFile not found!";
+            return;
+        }
+
+        while (file.read((char *)&record, sizeof(record)))
+        {
+            if (record.employeeId == id)
+            {
+                found = true;
+
+                cout << "\nEmployee Found!";
+                cout << "\nName: " << record.name;
+                cout << "\nCurrent Shift: " << record.shift;
+                cout << "\nCurrent Floor: " << record.floor;
+
+                cout << "\nEnter New Shift: ";
+                cin >> record.shift;
+
+                cout << "Enter New Floor: ";
+                cin >> record.floor;
+
+                file.seekp(position * sizeof(record), ios::beg);
+
+                file.write((char *)&record, sizeof(record));
+
+                cout << "\nEmployee Updated Successfully!";
+
+                break;
+            }
+
+            position++;
+        }
+
+        if (found == false)
+        {
+            cout << "\nEmployee Not Found!";
+        }
+
+        file.close();
+    }
 
     // Check duplicate employee ID
     bool isDuplicate(int id) const
@@ -285,7 +343,8 @@ int main()
         cout << "2. View All Employees\n";
         cout << "3. Search Employee\n";
         cout << "4. Display Total Employees\n";
-        cout << "5. Exit\n";
+        cout << "5. Update Employee\n";
+        cout << "6. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
         switch (choice)
@@ -308,6 +367,12 @@ int main()
             allocator.displayEmployeeCount();
             break;
         case 5:
+            int id;
+            cout << "\nEnter Employee id to update: ";
+            cin >> id;
+            allocator.updateEmployee(id);
+            break;
+        case 6:
             cout << "\nThank you for using the system!\n";
             break;
         default:
